@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react"
 import styles from '~/styles/carrito.css'
 import { useOutletContext } from "@remix-run/react"
-import {ClientOnly} from 'remix-utils' 
+import {ClientOnly} from 'remix-utils/client-only'
+
 export function links(){
     return[
       {
@@ -23,16 +24,18 @@ export function meta(){
 function Carrito() {
     const {carrito, actualizarCantidad, eliminarProducto}= useOutletContext()
     const [total, setTotal]= useState(0)
+    const [paginaLista, setpaginaLista]= useState(false)
 
     useEffect(() =>{
         const calculoTotal= carrito.reduce((total, producto) => total+ (producto.cantidad *producto.price), 0)
         setTotal(calculoTotal)
     }, [carrito])
 
-  return (
-    <ClientOnly fallback= {'cargando...'}>
-        {() => (
+ 
 
+  return (
+    <ClientOnly fallback= {'Cargando...'} >
+        {() =>
                 <main className="contenedor">
                     <h1 className="heading">Carrito</h1>
 
@@ -90,8 +93,8 @@ function Carrito() {
                         </aside>
                     </div>
                 </main>
-            )}
-          
+         }
+         
     </ClientOnly>
   )
 }
